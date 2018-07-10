@@ -14,7 +14,7 @@ def page_about():
 
 
 @app.route('/graph_sample')
-def page_graph():f
+def page_graph():
     from bokeh.plotting import figure
     from bokeh.io import output_file, show, save
     import pandas
