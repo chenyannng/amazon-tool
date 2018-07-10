@@ -1,2 +1,5 @@
 flask
 bokeh
+pandas
+requests
+bs4

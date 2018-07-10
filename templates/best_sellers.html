@@ -1,0 +1,14 @@
+{%extends "layout.html"%}
+{%block content%}
+<div class="parse">
+    <table border="1">
+        {% for key, value in categories.items() %}
+            <tr>
+                <td>
+                    <a href="{{ value }}">{{ key }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{%endblock%}
