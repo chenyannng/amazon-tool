@@ -36,11 +36,12 @@ def page_graph():
 def page_best_sellers():
     bs = BestSellers()
     categories = bs.get_bs_categories()
-    for category, url in categories.items():
-        print('Processing {} category'.format(category))
-        products = bs.get_product_list(url)
-        print('{} products found in {}'.format(len(products), category))
+    for category in categories:
+        print('Processing {} category'.format(category.name))
+        products = bs.get_product_list(category.url)
+        print('{} products found in {}'.format(len(products), category.name))
     return render_template('best_sellers.html', categories=categories)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    #app.run(debug=True, port=5000)
+    page_best_sellers()

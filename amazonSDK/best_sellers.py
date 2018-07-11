@@ -1,4 +1,5 @@
-from amazonSDK.page_scrap import parse_page
+from helpers.url import make_request
+from amazonSDK.models import Category, Product
 
 
 class BestSellers:
@@ -6,6 +7,7 @@ class BestSellers:
     url = 'https://www.amazon.com/Best-Sellers/zgbs'
 
     def __init__(self, url=None):
+
         self.url = url if url else self.url
 
     def get_bs_categories(self, recursive=False):
@@ -16,12 +18,13 @@ class BestSellers:
         :rtype dict
         """
         #TODO: implement recursive scanning
-        data = parse_page(self.url)
+        print('Collecting Best Sellers categories')
+        data = make_request(self.url)
         departments = data.find_all("ul", {"id": "zg_browseRoot"})[0].find_all("li")
-        result = {}
+        result = []
         for department in departments:
             if department.find('a'):
-                result.update({department.find('a').text: department.find('a').attrs.get('href', '')})
+                result.append(Category(name=department.find('a').text, url=department.find('a').attrs.get('href', '')))
         return result
 
     def get_product_list(self, url):
@@ -30,6 +33,8 @@ class BestSellers:
         :param url:
         :return:
         """
-        data = parse_page(url)
-        data = data.find('ul', {'class': 'a-pagination'}).find('li', {'class': 'a-last'})
+        data = make_request(url)
+        # bad user-agent from work:
+        # user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36
+        pages = [i for i in data.find_all('li', {'class': 'zg_page'})]
         pass
