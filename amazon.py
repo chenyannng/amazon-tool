@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from amazonSDK.best_sellers import BestSellers
 app = Flask(__name__)
 
@@ -34,14 +34,23 @@ def page_graph():
 
 @app.route('/best_sellers')
 def page_best_sellers():
-    bs = BestSellers()
-    categories = bs.get_bs_categories()
-    for category in categories:
-        print('Processing {} category'.format(category.name))
-        products = bs.get_product_list(category.url)
-        print('{} products found in {}'.format(len(products), category.name))
-    return render_template('best_sellers.html', categories=categories)
+    return render_template('best_sellers.html', categories={})
+
+
+@app.route('/best_sellers_results', methods=['POST'])
+def best_sellers_results():
+    """
+        bs = BestSellers()
+        categories = bs.get_bs_categories()
+        for category in categories:
+            print('Processing {} category'.format(category.name))
+            products = bs.get_product_list(category.url)
+            print('{} products found in {}'.format(len(products), category.name))
+        """
+    price_min = request.form['price_min'] or 0
+    price_max = request.form['price_max'] or 0
+    return render_template('best_sellers_results.html')
 
 if __name__ == '__main__':
-    #app.run(debug=True, port=5000)
-    page_best_sellers()
+    app.run(debug=True, port=5000)
+    #page_best_sellers()

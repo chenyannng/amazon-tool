@@ -1,6 +1,7 @@
 {%extends "layout.html"%}
 {%block content%}
 <div class="parse">
+    <!--
     <table border="1">
         {% for key, value in categories.items() %}
             <tr>
@@ -10,5 +11,23 @@
             </tr>
         {% endfor %}
     </table>
+    -->
+    <div class="body">
+        <form action="{{url_for('best_sellers_results')}}" method="POST">
+            <table>
+                <tr>
+                    <td>Price MIN:</td>
+                    <td><input title="Price MIN" placeholder="Enter min price" type="number" min="0" name="price_min"></td>
+                </tr>
+                <tr>
+                    <td>Price MAX:</td>
+                    <td><input title="Price MIN" placeholder="Enter max price" type="number" min="0" name="price_max"></td>
+                </tr>
+                <tr>
+                    <td><button type="submit">Submit</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
 {%endblock%}
