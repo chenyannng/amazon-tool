@@ -32,25 +32,28 @@ def page_graph():
     return render_template('graph.html')
 
 
+@app.route('/_best_sellers_populate')
+def page_best_sellers_populate():
+    bs = BestSellers()
+    bs.get_categories()
+    bs.populate_all_categories()
+    for category in bs.categories:
+        print('Processing {} category'.format(category.name))
+        products = bs.get_product_list(category.url)
+        print('{} products found in {}'.format(len(products), category.name))
+    return jsonify(result='Population completed')
+
+
 @app.route('/best_sellers')
 def page_best_sellers():
     return render_template('best_sellers.html', categories={})
 
 
 @app.route('/best_sellers_results', methods=['POST'])
-def best_sellers_results():
-    """
-        bs = BestSellers()
-        categories = bs.get_bs_categories()
-        for category in categories:
-            print('Processing {} category'.format(category.name))
-            products = bs.get_product_list(category.url)
-            print('{} products found in {}'.format(len(products), category.name))
-        """
-    price_min = request.form['price_min'] or 0
-    price_max = request.form['price_max'] or 0
+def page_best_sellers_results():
+    price_min = request.form['price_min']
+    price_max = request.form['price_max']
     return render_template('best_sellers_results.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-    #page_best_sellers()

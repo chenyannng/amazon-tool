@@ -8,16 +8,14 @@ class Product:
     def __init__(self, asin=None, header=None, price=None, url=None):
         self.asin = asin
         self.header = header
-        self.price = float(price) if type(price) in [int, float] else float(price.strip('$'))
         self.url = url
+        self.set_price(price)
 
-    def from_zg_item_immersion(self, data):
-        """
-        Form Product object from zg_itemImmersion HTML class
-        Amazon has two types of responses with different HTML layout
-        """
-        return set
-
+    def set_price(self, price):
+        if price:
+            self.price = float(price) if type(price) in [int, float] else float(price.strip('$'))
+        else:
+            self.price = None
 
 class Category:
     #TODO: implement link/method to parent and root category

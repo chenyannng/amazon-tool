@@ -1,6 +1,28 @@
 {%extends "layout.html"%}
 {%block content%}
-<div class="home">
-    <h1>This is first page...</h1>
-</div>
+
+    <head>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $('a#populate').bind('click', function () {
+                    document.getElementById("result").innerHTML = "Population in progress...";
+
+                    $.getJSON('/_best_sellers_populate', {}, function (data) {
+                        $("#result").text(data.result);
+                    })
+                })
+            })
+        </script>
+    </head>
+
+    <div class="home">
+        <table>
+            <tr>
+                <td><a href="#" id="populate"><button>Populate Best Sellers database</button></a></td>
+                <td><div id="result"></div></td>
+            </tr>
+        </table>
+    </div>
+
 {%endblock%}
