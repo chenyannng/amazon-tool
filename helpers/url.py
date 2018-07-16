@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import RequestException
+from amazonSDK.exceptions import CaptchaException
 
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -33,6 +34,9 @@ def make_request(url, return_soup=True, max_requests=3, request_number=1, user_a
 
     if response.status_code != 200:
         return None
+
+    if 'Sorry, we just need to make sure you\'re not a robot' in response.text:
+        raise CaptchaException('Request blocked by captcha!')
 
     if return_soup:
         return BeautifulSoup(response.content, "html.parser")

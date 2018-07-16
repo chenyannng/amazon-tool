@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from amazonSDK.best_sellers import BestSellers
+from amazonSDK.exceptions import CaptchaException
 app = Flask(__name__)
 
 
@@ -35,13 +36,18 @@ def page_graph():
 @app.route('/_best_sellers_populate')
 def page_best_sellers_populate():
     bs = BestSellers()
-    bs.get_categories()
-    bs.populate_all_categories()
-    for category in bs.categories:
-        print('Processing {} category'.format(category.name))
-        products = bs.get_product_list(category.url)
-        print('{} products found in {}'.format(len(products), category.name))
-    return jsonify(result='Population completed')
+    try:
+        bs.get_categories()
+        bs.populate_all_categories()
+        for category in bs.categories:
+            print('Processing {} category'.format(category.name))
+            products = bs.get_product_list(category.url)
+            print('{} products found in {}'.format(len(products), category.name))
+        return jsonify(result='Population completed')
+    except CaptchaException as e:
+        return jsonify(result=e.message)
+    except Exception as e:
+        return jsonify(result='Unknown error! Please check console logs')
 
 
 @app.route('/best_sellers')
